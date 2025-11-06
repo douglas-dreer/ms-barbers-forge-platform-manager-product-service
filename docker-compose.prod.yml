@@ -1,0 +1,142 @@
+# Production Docker Compose Override
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  postgres-db:
+    # Production-specific database configuration
+    environment:
+      # Use stronger password in production
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-changeme}
+      # Additional PostgreSQL settings for production
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+    
+    # Resource limits for production
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    
+    # Production restart policy
+    restart: unless-stopped
+    
+    # Enhanced health check for production
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    # Security: Don't expose database port in production
+    ports: []
+    expose:
+      - "5432"
+
+  manager-product-service:
+    # Production build configuration
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        - BUILD_VERSION=${BUILD_VERSION:-latest}
+    
+    # Production environment variables
+    environment:
+      # Database connection
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres-db:5432/${DATABASE_NAME}"
+      SPRING_DATASOURCE_USERNAME: ${DATABASE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
+      SPRING_JPA_DATABASE_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"
+      
+      # Production Spring profiles
+      SPRING_PROFILES_ACTIVE: "prod"
+      
+      # JPA/Hibernate production settings
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "validate"
+      SPRING_JPA_SHOW_SQL: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "false"
+      
+      # Logging configuration
+      LOGGING_LEVEL_ROOT: "WARN"
+      LOGGING_LEVEL_BR_COM_BARBERS_FORGE: "INFO"
+      LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+      
+      # Actuator security
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "when-authorized"
+      MANAGEMENT_SECURITY_ENABLED: "true"
+      
+      # JVM optimization
+      JAVA_OPTS: "-Xms512m -Xmx1g -XX:+UseG1GC -XX:+UseContainerSupport"
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    
+    # Production restart policy
+    restart: unless-stopped
+    
+    # Application health check
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    # Security: Don't expose application port directly in production
+    # Use reverse proxy (nginx) instead
+    ports: []
+    expose:
+      - "8080"
+
+  # Reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      manager-product-service:
+        condition: service_healthy
+    restart: unless-stopped
+    
+    # Resource limits for nginx
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+
+# Production volumes with specific drivers
+volumes:
+  postgres-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/docker/volumes/manager-product-postgres/_data
+
+# Production networks
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

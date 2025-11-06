@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Responsive Validation Tool</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #1976D2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .test-section {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .test-section:last-child {
+            border-bottom: none;
+        }
+        
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .viewport-simulator {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .device-frame {
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+            padding: 10px;
+        }
+        
+        .device-screen {
+            background: white;
+            border-radius: 5px;
+            overflow: auto;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .mobile {
+            width: 375px;
+            height: 667px;
+        }
+        
+        .tablet {
+            width: 768px;
+            height: 1024px;
+        }
+        
+        .desktop {
+            width: 1200px;
+            height: 800px;
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        
+        button {
+            background: #1976D2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #1565C0;
+        }
+        
+        .results-summary {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 3px solid #1976D2;
+        }
+        
+        .metric {
+            display: inline-block;
+            margin: 10px 20px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976D2;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .viewport-simulator {
+                flex-direction: column;
+            }
+            
+            .device-frame {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .mobile, .tablet, .desktop {
+                width: 100%;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Mobile Responsive Validation Tool</h1>
+            <p>Testing documentation responsiveness and mobile experience</p>
+        </div>
+        
+        <div class="controls">
+            <button onclick="runAllTests()">🧪 Run All Tests</button>
+            <button onclick="testViewportSizes()">📏 Test Viewport Sizes</button>
+            <button onclick="testTouchTargets()">👆 Test Touch Targets</button>
+            <button onclick="testReadability()">📖 Test Readability</button>
+            <button onclick="generateReport()">📊 Generate Report</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Viewport and Layout Tests</h3>
+            <div id="viewport-tests">
+                <p>Click "Test Viewport Sizes" to run viewport compatibility tests.</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📱 Device Simulation</h3>
+            <div class="viewport-simulator">
+                <div class="device-frame">
+                    <h4 style="color: white; text-align: center; margin: 0 0 10px 0;">Mobile (375px)</h4>
+                    <div class="device-screen mobile" id="mobile-preview">
+                        <div style="padding: 15px;">
+                            <h1>Manager Product Service</h1>
+                            <h2>Quick Start Guide</h2>
+                            <p>Welcome to the Manager Product Service quick start guide. Get your development environment up and running in under 10 minutes.</p>
+                            <h3>Prerequisites</h3>
+                            <ul>
+                                <li>Java 21 (LTS)</li>
+                                <li>Docker 20.10+</li>
+                                <li>Git 2.30+</li>
+                            </ul>
+                            <h3>Step 1: Clone Repository</h3>
+                            <pre style="background: #f5f5f5; padding: 10px; overflow-x: auto; font-size: 11px;">git clone &lt;repository-url&gt;
+cd manager-product-service</pre>
+                            <button style="width: 100%; margin: 10px 0;">Start Setup</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-frame">
+                    <h4 style="color: white; text-align: center; margin: 0 0 10px 0;">Tablet (768px)</h4>
+                    <div class="device-screen tablet" id="tablet-preview">
+                        <div style="padding: 20px; display: flex; gap: 20px;">
+                            <div style="flex: 1;">
+                                <h1>Manager Product Service</h1>
+                                <h2>Quick Start Guide</h2>
+                                <p>Welcome to the Manager Product Service quick start guide. Get your development environment up and running in under 10 minutes with this step-by-step guide.</p>
+                                <h3>Prerequisites</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr style="background: #f5f5f5;">
+                                        <th style="padding: 8px; border: 1px solid #ddd;">Software</th>
+                                        <th style="padding: 8px; border: 1px solid #ddd;">Version</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">Java JDK</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">21 (LTS)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">Docker</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">20.10+</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3>Step 1: Clone Repository</h3>
+                                <pre style="background: #f5f5f5; padding: 15px; overflow-x: auto;">git clone &lt;repository-url&gt;
+cd manager-product-service
+ls -la</pre>
+                                <button style="padding: 12px 24px; margin: 10px 0;">Start Setup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>👆 Touch Target Tests</h3>
+            <div id="touch-tests">
+                <p>Click "Test Touch Targets" to validate touch-friendly interface elements.</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📖 Readability Tests</h3>
+            <div id="readability-tests">
+                <p>Click "Test Readability" to check font sizes, line heights, and content spacing.</p>
+            </div>
+        </div>
+        
+        <div class="results-summary" id="results-summary" style="display: none;">
+            <h3>📊 Test Results Summary</h3>
+            <div class="metric">
+                <div class="metric-value" id="total-tests">0</div>
+                <div class="metric-label">Total Tests</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="passed-tests">0</div>
+                <div class="metric-label">Passed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="failed-tests">0</div>
+                <div class="metric-label">Failed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="success-rate">0%</div>
+                <div class="metric-label">Success Rate</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = {
+            total: 0,
+            passed: 0,
+            failed: 0,
+            warnings: 0,
+            details: []
+        };
+
+        function addTestResult(testName, passed, message = '') {
+            testResults.total++;
+            if (passed) {
+                testResults.passed++;
+            } else {
+                testResults.failed++;
+            }
+            
+            testResults.details.push({
+                name: testName,
+                passed: passed,
+                message: message
+            });
+        }
+
+        function displayTestResult(containerId, testName, passed, message = '') {
+            const container = document.getElementById(containerId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            resultDiv.innerHTML = `
+                <strong>${passed ? '✅' : '❌'} ${testName}</strong>
+                ${message ? `<br><small>${message}</small>` : ''}
+            `;
+            container.appendChild(resultDiv);
+            
+            addTestResult(testName, passed, message);
+        }
+
+        function testViewportSizes() {
+            const container = document.getElementById('viewport-tests');
+            container.innerHTML = '<h4>Running viewport compatibility tests...</h4>';
+            
+            // Test 1: Viewport meta tag
+            const viewportMeta = document.querySelector('meta[name="viewport"]');
+            displayTestResult('viewport-tests', 'Viewport Meta Tag Present', 
+                viewportMeta !== null, 
+                viewportMeta ? 'Found: ' + viewportMeta.content : 'Missing viewport meta tag');
+            
+            // Test 2: Responsive breakpoints
+            const testBreakpoints = [
+                { name: 'Mobile (375px)', width: 375 },
+                { name: 'Tablet (768px)', width: 768 },
+                { name: 'Desktop (1200px)', width: 1200 }
+            ];
+            
+            testBreakpoints.forEach(breakpoint => {
+                // Simulate viewport width test
+                const hasHorizontalScroll = document.body.scrollWidth > breakpoint.width;
+                displayTestResult('viewport-tests', `${breakpoint.name} Layout`, 
+                    !hasHorizontalScroll, 
+                    hasHorizontalScroll ? 'Horizontal scrolling detected' : 'Layout fits viewport');
+            });
+            
+            // Test 3: Flexible layouts
+            const flexElements = document.querySelectorAll('[style*="flex"], .flex, [class*="flex"]');
+            displayTestResult('viewport-tests', 'Flexible Layout Elements', 
+                flexElements.length > 0, 
+                `Found ${flexElements.length} flexible layout elements`);
+            
+            // Test 4: Media queries (check if CSS contains media queries)
+            let hasMediaQueries = false;
+            try {
+                Array.from(document.styleSheets).forEach(sheet => {
+                    Array.from(sheet.cssRules || []).forEach(rule => {
+                        if (rule.type === CSSRule.MEDIA_RULE) {
+                            hasMediaQueries = true;
+                        }
+                    });
+                });
+            } catch (e) {
+                // Cross-origin stylesheets
+            }
+            
+            displayTestResult('viewport-tests', 'Media Queries Present', 
+                hasMediaQueries, 
+                hasMediaQueries ? 'Responsive CSS detected' : 'No media queries found');
+        }
+
+        function testTouchTargets() {
+            const container = document.getElementById('touch-tests');
+            container.innerHTML = '<h4>Testing touch target accessibility...</h4>';
+            
+            // Test interactive elements
+            const interactiveElements = document.querySelectorAll('button, a, input, select, textarea, [onclick], [tabindex]');
+            let adequateSizeCount = 0;
+            let totalInteractive = interactiveElements.length;
+            
+            interactiveElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const minSize = 44; // WCAG recommendation
+                
+                if (rect.width >= minSize && rect.height >= minSize) {
+                    adequateSizeCount++;
+                }
+            });
+            
+            const touchTargetRatio = totalInteractive > 0 ? (adequateSizeCount / totalInteractive) * 100 : 100;
+            displayTestResult('touch-tests', 'Touch Target Size Compliance', 
+                touchTargetRatio >= 80, 
+                `${adequateSizeCount}/${totalInteractive} elements meet 44px minimum (${touchTargetRatio.toFixed(1)}%)`);
+            
+            // Test spacing between touch targets
+            let adequateSpacing = true;
+            const buttons = document.querySelectorAll('button');
+            for (let i = 0; i < buttons.length - 1; i++) {
+                const rect1 = buttons[i].getBoundingClientRect();
+                const rect2 = buttons[i + 1].getBoundingClientRect();
+                
+                const distance = Math.sqrt(
+                    Math.pow(rect2.left - rect1.right, 2) + 
+                    Math.pow(rect2.top - rect1.bottom, 2)
+                );
+                
+                if (distance < 8) { // Minimum 8px spacing
+                    adequateSpacing = false;
+                    break;
+                }
+            }
+            
+            displayTestResult('touch-tests', 'Touch Target Spacing', 
+                adequateSpacing, 
+                adequateSpacing ? 'Adequate spacing between interactive elements' : 'Some elements too close together');
+            
+            // Test for touch-friendly navigation
+            const navElements = document.querySelectorAll('nav, .navigation, [role="navigation"]');
+            displayTestResult('touch-tests', 'Touch-Friendly Navigation', 
+                navElements.length > 0, 
+                `Found ${navElements.length} navigation elements`);
+        }
+
+        function testReadability() {
+            const container = document.getElementById('readability-tests');
+            container.innerHTML = '<h4>Testing content readability...</h4>';
+            
+            // Test font sizes
+            const textElements = document.querySelectorAll('p, li, td, th, span, div');
+            let readableFontCount = 0;
+            let totalTextElements = 0;
+            
+            textElements.forEach(element => {
+                if (element.textContent.trim().length > 0) {
+                    totalTextElements++;
+                    const fontSize = parseFloat(window.getComputedStyle(element).fontSize);
+                    if (fontSize >= 14) {
+                        readableFontCount++;
+                    }
+                }
+            });
+            
+            const fontSizeRatio = totalTextElements > 0 ? (readableFontCount / totalTextElements) * 100 : 100;
+            displayTestResult('readability-tests', 'Readable Font Sizes', 
+                fontSizeRatio >= 90, 
+                `${readableFontCount}/${totalTextElements} elements have readable font size (${fontSizeRatio.toFixed(1)}%)`);
+            
+            // Test line height
+            const paragraphs = document.querySelectorAll('p');
+            let adequateLineHeightCount = 0;
+            
+            paragraphs.forEach(p => {
+                const lineHeight = parseFloat(window.getComputedStyle(p).lineHeight);
+                const fontSize = parseFloat(window.getComputedStyle(p).fontSize);
+                const ratio = lineHeight / fontSize;
+                
+                if (ratio >= 1.4) {
+                    adequateLineHeightCount++;
+                }
+            });
+            
+            const lineHeightRatio = paragraphs.length > 0 ? (adequateLineHeightCount / paragraphs.length) * 100 : 100;
+            displayTestResult('readability-tests', 'Adequate Line Height', 
+                lineHeightRatio >= 80, 
+                `${adequateLineHeightCount}/${paragraphs.length} paragraphs have adequate line height (${lineHeightRatio.toFixed(1)}%)`);
+            
+            // Test content width for readability
+            const contentElements = document.querySelectorAll('p, li');
+            let appropriateWidthCount = 0;
+            
+            contentElements.forEach(element => {
+                const width = element.getBoundingClientRect().width;
+                // Optimal reading width is 45-75 characters, roughly 600-900px
+                if (width <= 900) {
+                    appropriateWidthCount++;
+                }
+            });
+            
+            const widthRatio = contentElements.length > 0 ? (appropriateWidthCount / contentElements.length) * 100 : 100;
+            displayTestResult('readability-tests', 'Optimal Content Width', 
+                widthRatio >= 70, 
+                `${appropriateWidthCount}/${contentElements.length} elements have optimal width (${widthRatio.toFixed(1)}%)`);
+            
+            // Test color contrast (simplified)
+            const bodyStyle = window.getComputedStyle(document.body);
+            const backgroundColor = bodyStyle.backgroundColor;
+            const textColor = bodyStyle.color;
+            
+            displayTestResult('readability-tests', 'Color Contrast', 
+                backgroundColor !== textColor, 
+                `Background: ${backgroundColor}, Text: ${textColor}`);
+        }
+
+        function runAllTests() {
+            // Reset results
+            testResults = { total: 0, passed: 0, failed: 0, warnings: 0, details: [] };
+            
+            // Clear previous results
+            document.getElementById('viewport-tests').innerHTML = '';
+            document.getElementById('touch-tests').innerHTML = '';
+            document.getElementById('readability-tests').innerHTML = '';
+            
+            // Run all tests
+            testViewportSizes();
+            testTouchTargets();
+            testReadability();
+            
+            // Show results summary
+            updateResultsSummary();
+        }
+
+        function updateResultsSummary() {
+            const summaryDiv = document.getElementById('results-summary');
+            summaryDiv.style.display = 'block';
+            
+            document.getElementById('total-tests').textContent = testResults.total;
+            document.getElementById('passed-tests').textContent = testResults.passed;
+            document.getElementById('failed-tests').textContent = testResults.failed;
+            
+            const successRate = testResults.total > 0 ? Math.round((testResults.passed / testResults.total) * 100) : 0;
+            document.getElementById('success-rate').textContent = successRate + '%';
+            
+            // Update success rate color
+            const successRateElement = document.getElementById('success-rate');
+            if (successRate >= 90) {
+                successRateElement.style.color = '#28a745';
+            } else if (successRate >= 75) {
+                successRateElement.style.color = '#ffc107';
+            } else {
+                successRateElement.style.color = '#dc3545';
+            }
+        }
+
+        function generateReport() {
+            if (testResults.total === 0) {
+                alert('Please run tests first before generating a report.');
+                return;
+            }
+            
+            const report = {
+                timestamp: new Date().toISOString(),
+                summary: {
+                    totalTests: testResults.total,
+                    passedTests: testResults.passed,
+                    failedTests: testResults.failed,
+                    successRate: Math.round((testResults.passed / testResults.total) * 100)
+                },
+                details: testResults.details,
+                recommendations: []
+            };
+            
+            // Add recommendations based on results
+            if (report.summary.successRate < 90) {
+                report.recommendations.push('Consider improving responsive design implementation');
+            }
+            if (testResults.details.some(d => d.name.includes('Touch Target') && !d.passed)) {
+                report.recommendations.push('Increase touch target sizes to meet accessibility guidelines');
+            }
+            if (testResults.details.some(d => d.name.includes('Font') && !d.passed)) {
+                report.recommendations.push('Review font sizes for better readability');
+            }
+            
+            // Display report
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(`
+                <html>
+                <head>
+                    <title>Mobile Responsive Validation Report</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { background: #1976D2; color: white; padding: 20px; margin: -20px -20px 20px -20px; }
+                        .summary { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                        .test-detail { margin: 10px 0; padding: 10px; border-left: 4px solid #ddd; }
+                        .pass { border-left-color: #28a745; }
+                        .fail { border-left-color: #dc3545; }
+                        .recommendation { background: #fff3cd; padding: 10px; margin: 5px 0; border-radius: 3px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>📱 Mobile Responsive Validation Report</h1>
+                        <p>Generated on ${new Date().toLocaleString()}</p>
+                    </div>
+                    
+                    <div class="summary">
+                        <h2>Summary</h2>
+                        <p><strong>Total Tests:</strong> ${report.summary.totalTests}</p>
+                        <p><strong>Passed:</strong> ${report.summary.passedTests}</p>
+                        <p><strong>Failed:</strong> ${report.summary.failedTests}</p>
+                        <p><strong>Success Rate:</strong> ${report.summary.successRate}%</p>
+                    </div>
+                    
+                    <h2>Test Details</h2>
+                    ${report.details.map(detail => `
+                        <div class="test-detail ${detail.passed ? 'pass' : 'fail'}">
+                            <strong>${detail.passed ? '✅' : '❌'} ${detail.name}</strong>
+                            ${detail.message ? `<br><small>${detail.message}</small>` : ''}
+                        </div>
+                    `).join('')}
+                    
+                    ${report.recommendations.length > 0 ? `
+                        <h2>Recommendations</h2>
+                        ${report.recommendations.map(rec => `<div class="recommendation">💡 ${rec}</div>`).join('')}
+                    ` : ''}
+                </body>
+                </html>
+            `);
+        }
+
+        // Auto-run basic tests on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                console.log('Mobile Responsive Validation Tool loaded');
+                // You can uncomment the next line to auto-run tests
+                // runAllTests();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
