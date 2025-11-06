@@ -36,9 +36,16 @@ out/
 ### VS Code ###
 .vscode/
 
+### KIRO ###
+.kiro/
+
 ### Kotlin ###
 .kotlin
 
 ### env ###
 .env
 .env.example
+
+
+### site ###
+site/
