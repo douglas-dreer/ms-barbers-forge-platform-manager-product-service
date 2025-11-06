@@ -12,6 +12,3 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-
-  config:
-    import: "file:.env[.properties]"
