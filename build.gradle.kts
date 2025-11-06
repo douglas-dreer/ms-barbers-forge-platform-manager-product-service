@@ -21,15 +21,23 @@ repositories {
 }
 
 dependencies {
+
+	// --- 1. Spring Boot Starters ---
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.flywaydb:flyway-core")
-	implementation("org.flywaydb:flyway-sqlserver")
+
+	// --- 2. Kotlin & Jackson Support ---
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	runtimeOnly("com.microsoft.sqlserver:mssql-jdbc")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	// --- 3. Database & Migrations ---
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-database-postgresql")
+	runtimeOnly("org.postgresql:postgresql")
+
+	// --- 4. Testing ---
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
