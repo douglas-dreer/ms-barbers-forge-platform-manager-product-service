@@ -1,0 +1,191 @@
+# Site Configuration
+site_name: Manager Product Service Documentation
+site_description: Enhanced documentation for the Manager Product Service microservice
+site_author: Barber's Forge Team
+site_url: https://docs.barbersforge.com/manager-product-service
+
+# Repository
+repo_name: ms-barbers-forge-platform-manager-product-service
+repo_url: https://github.com/douglas-dreer/ms-barbers-forge-platform-manager-product-service
+
+# Theme Configuration
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.indexes
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - content.action.edit
+    - content.action.view
+    - announce.dismiss
+  
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+# Navigation Structure
+nav:
+  - Home: index.md
+  - Quick Start: quick-start/index.md
+  - Environment Setup:
+    - Development: environment-setup/development.md
+    - Staging: environment-setup/staging.md
+    - Production: environment-setup/production.md
+  - Database:
+    - PostgreSQL Setup: database/postgresql-setup.md
+    - Migrations: database/migrations.md
+  - Configuration: configuracao.md
+  - Docker: docker/containerization.md
+  - Troubleshooting: troubleshooting/index.md
+
+# Markdown Extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: On this page
+  
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: barbersforge
+      repo: manager-product-service
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+      lang: 
+        - en
+        - pt
+      prebuild_index: true
+      indexing: 'full'
+  - tags:
+      tags_file: tags.md
+  - mermaid2:
+      arguments:
+        theme: |
+          ^(JSON.parse(__md_get("__palette").index == 1)) ?
+          'dark' : 'light'
+        accessibility:
+          enabled: true
+
+# Extra CSS and JavaScript
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/enhanced-features.js
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# Extra Configuration
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/barbersforge/manager-product-service
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/barbersforge/manager-product-service
+  
+  tags:
+    Configuration: configuration
+    Database: database
+    Docker: docker
+    Troubleshooting: troubleshooting
+    Environment: environment
+    Security: security
+    Performance: performance
+    API: api
+  
+  analytics:
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >- 
+            Thanks for your feedback! Help us improve this page by
+            <a href="https://github.com/barbersforge/manager-product-service/issues/new/?title=[Docs Feedback]+{title}+-+{url}" target="_blank" rel="noopener">telling us what you found lacking</a>.
+
+# Copyright
+copyright: Copyright &copy; 2024 Barber's Forge Team
