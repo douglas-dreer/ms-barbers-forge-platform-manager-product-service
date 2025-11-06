@@ -36,6 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+### KIRO ###
+.kiro/
+
 ### Kotlin ###
 .kotlin
 
